@@ -7,14 +7,16 @@ import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
+import androidx.databinding.library.baseAdapters.BR
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.jake.archstudy.ext.toast
+import dagger.android.support.DaggerFragment
 
 abstract class BaseFragment<B : ViewDataBinding, VM : BaseViewModel>(
     @LayoutRes
     private val layoutId: Int
-) : Fragment() {
+) : DaggerFragment() {
 
     protected lateinit var binding: B
 
@@ -31,8 +33,8 @@ abstract class BaseFragment<B : ViewDataBinding, VM : BaseViewModel>(
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        binding.setVariable(BR.vm, viewModel)
         binding.lifecycleOwner = viewLifecycleOwner
         viewModel.toast.observe(viewLifecycleOwner, Observer { toast(it) })
     }
-
 }

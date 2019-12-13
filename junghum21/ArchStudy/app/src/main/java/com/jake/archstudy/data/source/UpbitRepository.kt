@@ -2,8 +2,11 @@ package com.jake.archstudy.data.source
 
 import com.jake.archstudy.network.response.MarketResponse
 import com.jake.archstudy.network.response.TickerResponse
+import javax.inject.Inject
 
-class UpbitRepository private constructor() : UpbitDataSource {
+class UpbitRepository @Inject constructor(
+    private val upbitRemoteDataSource: UpbitRemoteDataSource
+) : UpbitDataSource {
 
     override fun getMarketAll(
         success: (List<MarketResponse>) -> Unit,
@@ -19,18 +22,4 @@ class UpbitRepository private constructor() : UpbitDataSource {
     ) {
         upbitRemoteDataSource.getTicker(markets, success, failure)
     }
-
-    companion object {
-
-        private var INSTANCE: UpbitRepository? = null
-
-        private lateinit var upbitRemoteDataSource: UpbitRemoteDataSource
-
-        fun getInstance(upbitRemoteDataSource: UpbitRemoteDataSource): UpbitRepository {
-            this.upbitRemoteDataSource = upbitRemoteDataSource
-            return INSTANCE ?: UpbitRepository().also { INSTANCE = it }
-        }
-
-    }
-
 }

@@ -6,8 +6,11 @@ import com.jake.archstudy.network.service.UpbitService
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import javax.inject.Inject
 
-class UpbitRemoteDataSource(private val upbitService: UpbitService) : UpbitDataSource {
+class UpbitRemoteDataSource @Inject constructor(
+    private val upbitService: UpbitService
+) : UpbitDataSource {
 
     override fun getMarketAll(
         success: (List<MarketResponse>) -> Unit,
@@ -59,5 +62,4 @@ class UpbitRemoteDataSource(private val upbitService: UpbitService) : UpbitDataS
                 }
             })
     }
-
 }

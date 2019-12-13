@@ -7,8 +7,9 @@ import com.jake.archstudy.base.BaseViewModel
 import com.jake.archstudy.data.model.Market
 import com.jake.archstudy.data.source.UpbitRepository
 import com.jake.archstudy.util.ResourceProvider
+import javax.inject.Inject
 
-class MainViewModel(
+class MainViewModel @Inject constructor(
     private val repository: UpbitRepository,
     private val resourceProvider: ResourceProvider
 ) : BaseViewModel() {

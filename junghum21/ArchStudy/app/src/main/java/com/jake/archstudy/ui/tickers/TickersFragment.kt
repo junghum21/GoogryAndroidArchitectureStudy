@@ -1,40 +1,39 @@
 package com.jake.archstudy.ui.tickers
 
-import android.os.Bundle
 import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.jake.archstudy.R
 import com.jake.archstudy.base.BaseFragment
-import com.jake.archstudy.data.source.UpbitRemoteDataSource
 import com.jake.archstudy.data.source.UpbitRepository
 import com.jake.archstudy.databinding.FragmentTickersBinding
-import com.jake.archstudy.network.ApiUtil
-import com.jake.archstudy.util.ResourceProviderImpl
+import com.jake.archstudy.util.ResourceProvider
+import javax.inject.Inject
 
 class TickersFragment :
     BaseFragment<FragmentTickersBinding, TickersViewModel>(R.layout.fragment_tickers) {
+
+    @Inject
+    lateinit var upbitRepository: UpbitRepository
+
+    @Inject
+    lateinit var resourceProvider: ResourceProvider
 
     override val viewModel by lazy {
         @Suppress("UNCHECKED_CAST")
         ViewModelProviders.of(this, object : ViewModelProvider.Factory {
             override fun <T : ViewModel?> create(modelClass: Class<T>): T {
                 return TickersViewModel(
-                    UpbitRepository.getInstance(UpbitRemoteDataSource(ApiUtil.getUpbitService())),
+                    upbitRepository,
                     marketName,
-                    ResourceProviderImpl(requireContext())
+                    resourceProvider
                 ) as T
             }
         }).get(TickersViewModel::class.java)
     }
 
     private val marketName by lazy { arguments?.getString(ARGS_MARKET_NAME) ?: "" }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        binding.vm = viewModel
-    }
 
     companion object {
 
@@ -45,7 +44,5 @@ class TickersFragment :
                 arguments = bundleOf(ARGS_MARKET_NAME to marketName)
             }
         }
-
     }
-
 }
